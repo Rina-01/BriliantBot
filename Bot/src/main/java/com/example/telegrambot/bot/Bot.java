@@ -2,10 +2,12 @@ package com.example.telegrambot.bot;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -37,7 +39,7 @@ public class Bot extends TelegramLongPollingBot {
                 case "/mark":
                     try {
                         UserText = this.getmark("65913");
-                    } catch (IOException e) {
+                    } catch (IOException | ParseException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
@@ -56,13 +58,16 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private String getmark(String stud) throws IOException {
+    private String getmark(String stud) throws IOException, ParseException {
         URL url = new URL("http://127.0.0.1:5000/api/avg?stud=" + stud);
         Scanner scanner = new Scanner((InputStream) url.getContent());
         String result = "";
         while (scanner.hasNext()) {
             result += scanner.nextLine();
         }
-        return result;
+        JSONParser parser = new JSONParser();
+        JSONObject JSobj = (JSONObject) parser.parse(result);
+
+        return (String) JSobj.get("avg_points");
     }
 }
