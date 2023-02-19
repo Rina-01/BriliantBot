@@ -1,27 +1,33 @@
 package com.example.telegrambot.bot;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Scanner;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import com.example.telegrambot.command.*;
+
 public class Bot extends TelegramLongPollingBot {
+
+    private static final String BOT_NAME = "HelpToPlanStudyBot";
+    private static final String BOT_TOKEN = "6015366458:AAHOfVyAH1zFCRIkmIgEBLh2artNvpntfTw";
+
     @Override
     public String getBotUsername() {
-        return "HelpToPlanStudyBot";
+        return BOT_NAME;
     }
 
     @Override
     public String getBotToken() {
-        return "6015366458:AAHOfVyAH1zFCRIkmIgEBLh2artNvpntfTw";
+        return BOT_TOKEN;
+    }
+
+    public Bot(DefaultBotOptions botOptions) {
+        super(botOptions, BOT_NAME);
+
+        System.out.println(new MarkCommand());
+
     }
 
     @Override
@@ -35,18 +41,7 @@ public class Bot extends TelegramLongPollingBot {
                                                              // переменную
 
             // изменяем как хотим UserText
-            switch (UserText) {
-                case "/mark":
-                    try {
-                        UserText = this.getmark("65913");
-                    } catch (IOException | ParseException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    break;
-                default:
-                    UserText += " :))";
-            }
+            UserText += " :))";
 
             message.setText(UserText); // сохраняем в переменную для отправки
 
@@ -58,16 +53,4 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private String getmark(String stud) throws IOException, ParseException {
-        URL url = new URL("http://127.0.0.1:5000/api/avg?stud=" + stud);
-        Scanner scanner = new Scanner((InputStream) url.getContent());
-        String result = "";
-        while (scanner.hasNext()) {
-            result += scanner.nextLine();
-        }
-        JSONParser parser = new JSONParser();
-        JSONObject JSobj = (JSONObject) parser.parse(result);
-
-        return (String) JSobj.get("avg_points");
-    }
 }
