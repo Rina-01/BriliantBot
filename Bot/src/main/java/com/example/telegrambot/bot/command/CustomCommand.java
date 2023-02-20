@@ -6,7 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-abstract class CustomCommand extends BotCommand {
+//import com.example.telegrambot.bot.Bot;
+
+public abstract class CustomCommand extends BotCommand {
 
     CustomCommand(String commandIdentifier, String description) {
         super(commandIdentifier, description);
@@ -19,4 +21,9 @@ abstract class CustomCommand extends BotCommand {
             e.printStackTrace();
         }
     }
+
+    // public final boolean register(Bot bot) {
+    // return bot.commandRegistry.register(this);
+    // }
+
 }

@@ -19,7 +19,6 @@ public class MarkCommand extends CustomCommand {
 
     public MarkCommand() {
         super("mark", "get your average mark");
-        System.out.println("Mark");
     }
 
     public void processMessage(AbsSender absSender, Message message, String[] arguments) {
@@ -48,12 +47,14 @@ public class MarkCommand extends CustomCommand {
     }
 
     public String getmark(String stud) throws IOException, ParseException {
+        System.out.println("MarkGetMark");
         URL url = new URL("http://127.0.0.1:5000/api/avg?stud=" + stud);
         Scanner scanner = new Scanner((InputStream) url.getContent());
         String result = "";
         while (scanner.hasNext()) {
             result += scanner.nextLine();
         }
+        scanner.close();
 
         JSONParser parser = new JSONParser();
         JSONObject JSobj = (JSONObject) parser.parse(result);
